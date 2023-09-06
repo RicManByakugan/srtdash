@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ChartJS</title>
+
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css" />
+    <link rel="stylesheet" href="dist/css/adminlte.min.css" />
+  </head>
+  <body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+      <div class="content-wrapper">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card card-success">
+              <div class="card-header">
+                <h3 class="card-title">Stacked Bar Chart</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart">
+                  <canvas
+                    id="stackedBarChart"
+                    style="
+                      min-height: 250px;
+                      height: 250px;
+                      max-height: 250px;
+                      max-width: 100%;
+                    "
+                  ></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Stacked Bar Chart</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart">
+                  <canvas
+                    id="areaChart"
+                    style="
+                      min-height: 250px;
+                      height: 250px;
+                      max-height: 250px;
+                      max-width: 100%;
+                    "
+                  ></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="far fa-chart-bar"></i>
+                  Sparklines
+                </h3>
+
+                <div class="card-tools">
+                  <button
+                    type="button"
+                    class="btn btn-tool"
+                    data-card-widget="collapse"
+                  >
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-tool"
+                    data-card-widget="remove"
+                  >
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-4 text-center">
+                    <div id="sparkline-1"></div>
+                  </div>
+                  <!-- ./col -->
+                  <div class="col-4 text-center">
+                    <div id="sparkline-2"></div>
+                  </div>
+                  <!-- ./col -->
+                  <div class="col-4 text-center">
+                    <div id="sparkline-3"></div>
+                  </div>
+                  <!-- ./col -->
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <!-- Line chart -->
+                    <div class="card card-primary card-outline">
+                      <div class="card-header">
+                        <h3 class="card-title">
+                          <i class="far fa-chart-bar"></i>
+                          Line Chart
+                        </h3>
+
+                        <div class="card-tools">
+                          <button
+                            type="button"
+                            class="btn btn-tool"
+                            data-card-widget="collapse"
+                          >
+                            <i class="fas fa-minus"></i>
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-tool"
+                            data-card-widget="remove"
+                          >
+                            <i class="fas fa-times"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        <div id="line-chart" style="height: 300px"></div>
+                      </div>
+                      <!-- /.card-body-->
+                    </div>
+                    <!-- /.card -->
+
+                    <!-- Area chart -->
+                    <div class="card card-primary card-outline">
+                      <div class="card-header">
+                        <h3 class="card-title">
+                          <i class="far fa-chart-bar"></i>
+                          Area Chart
+                        </h3>
+
+                        <div class="card-tools">
+                          <button
+                            type="button"
+                            class="btn btn-tool"
+                            data-card-widget="collapse"
+                          >
+                            <i class="fas fa-minus"></i>
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-tool"
+                            data-card-widget="remove"
+                          >
+                            <i class="fas fa-times"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        <div
+                          id="area-chart"
+                          style="height: 338px"
+                          class="full-width-chart"
+                        ></div>
+                      </div>
+                      <!-- /.card-body-->
+                    </div>
+                    <!-- /.card -->
+                  </div>
+                </div>
+                <!-- /.row -->
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+      </div>
+    </div>
+
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <script src="plugins/chart.js/Chart.min.js"></script>
+    <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+    <script src="plugins/sparklines/sparkline.js"></script>
+    <script src="plugins/flot/jquery.flot.js"></script>
+    <script src="plugins/flot/plugins/jquery.flot.resize.js"></script>
+    <script src="plugins/flot/plugins/jquery.flot.pie.js"></script>
+    <script>
+      $(function () {
+        var sin = [],
+          cos = [];
+        for (var i = 0; i < 14; i += 0.5) {
+          sin.push([i, Math.sin(i)]);
+          cos.push([i, Math.cos(i)]);
+        }
+        var line_data1 = {
+          data: sin,
+          color: "#3c8dbc",
+        };
+        var line_data2 = {
+          data: cos,
+          color: "#00c0ef",
+        };
+        $.plot("#line-chart", [line_data1, line_data2], {
+          grid: {
+            hoverable: true,
+            borderColor: "#f3f3f3",
+            borderWidth: 1,
+            tickColor: "#f3f3f3",
+          },
+          series: {
+            shadowSize: 0,
+            lines: {
+              show: true,
+            },
+            points: {
+              show: true,
+            },
+          },
+          lines: {
+            fill: false,
+            color: ["#3c8dbc", "#f56954"],
+          },
+          yaxis: {
+            show: true,
+          },
+          xaxis: {
+            show: true,
+          },
+        });
+        //Initialize tooltip on hover
+
+        var areaChartData = {
+          labels: [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+          ],
+          datasets: [
+            {
+              label: "Digital Goods",
+              backgroundColor: "rgba(60,141,188,0.9)",
+              borderColor: "rgba(60,141,188,0.8)",
+              pointRadius: false,
+              pointColor: "#3b8bba",
+              pointStrokeColor: "rgba(60,141,188,1)",
+              pointHighlightFill: "#fff",
+              pointHighlightStroke: "rgba(60,141,188,1)",
+              data: [28, 48, 40, 19, 86, 27, 90],
+            },
+          ],
+        };
+
+        var areaChartOptions = {
+          maintainAspectRatio: false,
+          responsive: true,
+          legend: {
+            display: false,
+          },
+          scales: {
+            xAxes: [
+              {
+                gridLines: {
+                  display: false,
+                },
+              },
+            ],
+            yAxes: [
+              {
+                gridLines: {
+                  display: false,
+                },
+              },
+            ],
+          },
+        };
+
+        var areaChartCanvas = $("#areaChart").get(0).getContext("2d");
+        var areaChart = new Chart(areaChartCanvas, {
+          type: "line",
+          data: areaChartData,
+          options: areaChartOptions,
+        });
+
+        var barChartData = $.extend(true, {}, areaChartData);
+
+        var stackedBarChartCanvas = $("#stackedBarChart")
+          .get(0)
+          .getContext("2d");
+        var stackedBarChartData = $.extend(true, {}, barChartData);
+
+        var stackedBarChartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            xAxes: [
+              {
+                stacked: true,
+              },
+            ],
+            yAxes: [
+              {
+                stacked: true,
+              },
+            ],
+          },
+        };
+
+        var stackedBarChart = new Chart(stackedBarChartCanvas, {
+          type: "bar",
+          data: stackedBarChartData,
+          options: stackedBarChartOptions,
+        });
+
+        var sparkline1 = new Sparkline($("#sparkline-1")[0], {
+          width: 240,
+          height: 70,
+          lineColor: "#92c1dc",
+          endColor: "#92c1dc",
+        });
+        var sparkline2 = new Sparkline($("#sparkline-2")[0], {
+          width: 240,
+          height: 70,
+          lineColor: "#f56954",
+          endColor: "#f56954",
+        });
+        var sparkline3 = new Sparkline($("#sparkline-3")[0], {
+          width: 240,
+          height: 70,
+          lineColor: "#3af221",
+          endColor: "#3af221",
+        });
+
+        sparkline1.draw([1000, 1200, 920, 927, 931, 1027, 819, 930, 1021]);
+        sparkline2.draw([
+          515, 519, 520, 522, 652, 810, 370, 627, 319, 630, 921,
+        ]);
+        sparkline3.draw([15, 19, 20, 22, 33, 27, 31, 27, 19, 30, 21]);
+      });
+    </script>
+  </body>
+</html>
